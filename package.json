@@ -1,0 +1,35 @@
+{
+  "name": "s3put",
+  "version": "1.0.0",
+  "description": "Node library and cli to crop, optimize and upload images and document to s3.",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/firstandthird/s3put.git"
+  },
+  "keywords": [
+    "crop",
+    "upload",
+    "images",
+    "s3"
+  ],
+  "author": "First+Third",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/firstandthird/s3put/issues"
+  },
+  "homepage": "https://github.com/firstandthird/s3put#readme",
+  "dependencies": {
+    "async": "^2.0.1",
+    "aws-sdk": "^2.6.3",
+    "imagemin": "^5.2.2",
+    "imagemin-gm": "^1.0.2",
+    "imagemin-pngquant": "^5.0.0",
+    "ini-config-parser": "^1.0.2",
+    "lodash": "^4.15.0",
+    "yargs": "^5.0.0"
+  }
+}
