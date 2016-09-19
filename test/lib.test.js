@@ -17,7 +17,9 @@ describe('can be used as a library', () => {
       size: [100, 100],
     };
     s3put(stream, options, (err, response) => {
-      console.log(response);
+      if (err) {
+        console.log(err);
+      }
       chai.expect(response.key).to.include(testImageBase);
       done();
     });

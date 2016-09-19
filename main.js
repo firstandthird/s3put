@@ -1,14 +1,14 @@
 'use strict';
 const s3 = require('./lib/s3.js');
 const image = require('./lib/image.js');
-const aws_auth = require('./lib/commonAWS');
+const awsAuth = require('./lib/commonAWS');
 const async = require('async');
 const path = require('path');
 const fs = require('fs');
 
 const execute = (fileName, argv, callback) => {
   // establish AWS credentials:
-  const aws = aws_auth(argv);
+  const aws = awsAuth(argv);
   // make sure working directory is present:
   if (!fs.existsSync) {
     fs.mkdirSync('build');

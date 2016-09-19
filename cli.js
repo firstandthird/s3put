@@ -3,24 +3,24 @@ const _ = require('lodash');
 
 const argv = require('yargs')
 .options({
-  'profile': {
+  profile: {
     describe: 'name of aws profile to use',
     default: false
   },
-  'bucket': {
+  bucket: {
     describe: 's3 bucket to upload the image to',
     default: 's3-bucket'
   },
-  'quality': {
+  quality: {
     describe: 'set to a number between 0 and 100 to compress the image',
     default: false
   },
-  'position': {
+  position: {
     describe: 'used in cropping, indicates the x,y coord for the upper-left corner of the cropping square',
     nargs: 2,
-    default: [0,0]
+    default: [0, 0]
   },
-  'size': {
+  size: {
     describe: 'used in cropping, indicates the length of the x,y axes for the cropping square',
     nargs: 2,
     default: false
