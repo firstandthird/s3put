@@ -4,7 +4,8 @@
   "description": "Node library and cli to crop, optimize and upload images and document to s3.",
   "main": "index.js",
   "scripts": {
-    "test": "mocha"
+    "test": "mocha",
+    "lint": "eslint ."
   },
   "repository": {
     "type": "git",
@@ -25,11 +26,16 @@
   "dependencies": {
     "async": "^2.0.1",
     "aws-sdk": "^2.6.3",
+    "gm": "^1.23.0",
     "imagemin": "^5.2.2",
-    "imagemin-gm": "^1.0.2",
     "imagemin-pngquant": "^5.0.0",
     "ini-config-parser": "^1.0.2",
     "lodash": "^4.15.0",
     "yargs": "^5.0.0"
+  },
+  "devDependencies": {
+    "eslint": "^3.4.0",
+    "eslint-config-firstandthird": "^3.0.2",
+    "eslint-plugin-import": "^1.14.0"
   }
 }
