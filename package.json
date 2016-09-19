@@ -34,8 +34,10 @@
     "yargs": "^5.0.0"
   },
   "devDependencies": {
+    "chai": "^3.5.0",
     "eslint": "^3.4.0",
     "eslint-config-firstandthird": "^3.0.2",
-    "eslint-plugin-import": "^1.14.0"
+    "eslint-plugin-import": "^1.14.0",
+    "mocha": "^3.0.2"
   }
 }
