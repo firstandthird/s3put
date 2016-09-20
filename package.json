@@ -2,7 +2,10 @@
   "name": "s3put",
   "version": "1.0.0",
   "description": "Node library and cli to crop, optimize and upload images and document to s3.",
-  "main": "index.js",
+  "main": "main.js",
+  "bin": {
+    "s3put": "cli.js"
+  },
   "scripts": {
     "test": "mocha",
     "lint": "eslint ."

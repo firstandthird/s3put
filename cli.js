@@ -1,3 +1,4 @@
+#! /usr/bin/env node
 const main = require('./main.js');
 const _ = require('lodash');
 
