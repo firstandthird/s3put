@@ -9,7 +9,7 @@ const argv = require('yargs')
   },
   bucket: {
     describe: 's3 bucket to upload the image to',
-    default: 's3-bucket'
+    demand: true
   },
   quality: {
     describe: 'set to a number between 0 and 100 to compress the image',
@@ -27,6 +27,7 @@ const argv = require('yargs')
   },
 })
 .demand(1)
+.demand('bucket')
 .argv;
 
 const fileName = _.last(argv._);
