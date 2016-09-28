@@ -29,8 +29,10 @@
   "dependencies": {
     "async": "^2.0.1",
     "aws-sdk": "^2.6.3",
+    "fs-extra": "^0.30.0",
     "gm": "^1.23.0",
     "imagemin": "^5.2.2",
+    "imagemin-mozjpeg": "^6.0.0",
     "imagemin-pngquant": "^5.0.0",
     "ini-config-parser": "^1.0.2",
     "lodash": "^4.15.0",

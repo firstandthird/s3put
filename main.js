@@ -4,24 +4,22 @@ const image = require('./lib/image.js');
 const awsAuth = require('./lib/commonAWS');
 const async = require('async');
 const path = require('path');
-const fs = require('fs');
+const fs = require('fs-extra');
 const os = require('os');
 
-const execute = (fileName, argv, callback) => {
+const execute = (imageFilePath, argv, callback) => {
   // establish AWS credentials:
   const aws = awsAuth(argv);
+  // const tmpFilePath = path.join(os.tmpdir(), path.basename(imageFilePath));
   // do the main pipeline:
   async.auto({
     compress: (done) => {
       if (argv.quality) {
-        return image.compress(fileName, argv.quality, (err, result) => {
+        return image.compress(imageFilePath, argv.quality, (err, result) => {
           return done(err, result);
         });
       }
-      // if no compress, just copy file to tmp
-      const destName = path.join(os.tmpdir(), fileName);
-      fs.createReadStream(fileName).pipe(fs.createWriteStream(destName));
-      return done(null, destName);
+      return done(null, imageFilePath);
     },
     crop: ['compress', (results, done) => {
       if (argv.size) {
@@ -33,22 +31,35 @@ const execute = (fileName, argv, callback) => {
     }],
     upload: ['crop', (results, done) => {
       return s3.put(aws, argv.bucket, results.crop, done);
-    }]
+    }],
   }, (err, results) => {
     callback(err, results.upload);
   });
 };
 
 module.exports = (stream, options, callback) => {
+  const originalFilePath = typeof stream === 'string' ? stream : stream.path;
+  const tmpFilePath = path.join(os.tmpdir(), path.basename(originalFilePath));
+  const originalCallback = callback;
+  // wrap the callback so it cleans up and returns the results:
+  callback = (err, uploadResult) => {
+    fs.remove(tmpFilePath);
+    return originalCallback(err, uploadResult);
+  };
   // make sure options is set
   if (options.profile === undefined) {
     options.profile = false;
   }
-  let fileName = stream;
-  // if it isn't a string then it' a buffer:
+  // make sure the tmp file is written into the tmp folder:
   if (typeof stream === 'object' && stream.path) {
-    fileName = path.join(os.tmpdir(), path.basename(stream.path));
-    stream.pipe(fs.createWriteStream(fileName));
+    const writeStream = fs.createWriteStream(tmpFilePath);
+    writeStream.on('finish', () => {
+      execute(tmpFilePath, options, callback);
+    });
+    stream.pipe(writeStream);
+  } else {
+    // just copy the file to the temp folder:
+    fs.copySync(originalFilePath, tmpFilePath);
+    execute(tmpFilePath, options, callback);
   }
-  execute(fileName, options, callback);
 };
