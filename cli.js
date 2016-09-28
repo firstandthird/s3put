@@ -8,6 +8,10 @@ const argv = require('yargs')
     describe: 'name of aws profile to use',
     default: false
   },
+  public: {
+    describe: 'set the object as public in s3',
+    default: false
+  },
   bucket: {
     describe: 's3 bucket to upload the image to',
     demand: true

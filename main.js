@@ -29,7 +29,7 @@ const execute = (imageFilePath, argv, callback) => {
       return done(null, results.compress);
     }],
     upload: ['crop', (results, done) => {
-      return s3.put(aws, argv.bucket, results.crop, done);
+      return s3.put(aws, argv, results.crop, done);
     }],
   }, (err, results) => {
     callback(err, results.upload);
