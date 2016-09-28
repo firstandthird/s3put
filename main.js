@@ -10,7 +10,6 @@ const os = require('os');
 const execute = (imageFilePath, argv, callback) => {
   // establish AWS credentials:
   const aws = awsAuth(argv);
-  // const tmpFilePath = path.join(os.tmpdir(), path.basename(imageFilePath));
   // do the main pipeline:
   async.auto({
     compress: (done) => {

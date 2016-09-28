@@ -7,6 +7,7 @@ const testImageBase = 'snoopy.jpg';
 const testImage = path.join(__dirname, testImageBase);
 const testFileBase = 'snoopy.txt';
 const testFile = path.join(__dirname, testFileBase);
+const useImageMagick = true; // can change this to false to use GraphicsMagick
 
 describe('can be used as a library', () => {
   if (process.env.AWS_BUCKET === undefined || process.env.AWS_PROFILE === undefined) {
@@ -16,6 +17,7 @@ describe('can be used as a library', () => {
   it('should be able to upload an unmodified image', (done) => {
     const stream = fs.createReadStream(testImage);
     const options = {
+      imagemagick: useImageMagick,
       bucket: process.env.AWS_BUCKET,
       profile: process.env.AWS_PROFILE
     };
@@ -30,6 +32,7 @@ describe('can be used as a library', () => {
   it('should be able to upload a non-image', (done) => {
     const stream = fs.createReadStream(testFile);
     const options = {
+      imagemagick: useImageMagick,
       bucket: process.env.AWS_BUCKET,
       profile: process.env.AWS_PROFILE
     };
@@ -44,6 +47,7 @@ describe('can be used as a library', () => {
   it('should be able to crop and then upload an image', (done) => {
     const stream = fs.createReadStream(testImage);
     const options = {
+      imagemagick: useImageMagick,
       bucket: process.env.AWS_BUCKET,
       profile: process.env.AWS_PROFILE,
       position: [20, 20],
@@ -60,6 +64,7 @@ describe('can be used as a library', () => {
   it('should be able to compress and then upload an image', (done) => {
     const stream = fs.createReadStream(testImage);
     const options = {
+      imagemagick: useImageMagick,
       bucket: process.env.AWS_BUCKET,
       profile: process.env.AWS_PROFILE,
       quality: 50
@@ -75,6 +80,7 @@ describe('can be used as a library', () => {
   it('should be able to crop/compress/upload an image without error', (done) => {
     const stream = fs.createReadStream(testImage);
     const options = {
+      imagemagick: useImageMagick,
       bucket: process.env.AWS_BUCKET,
       profile: process.env.AWS_PROFILE,
       quality: 80,

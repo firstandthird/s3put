@@ -36,6 +36,7 @@
     "imagemin-pngquant": "^5.0.0",
     "ini-config-parser": "^1.0.2",
     "lodash": "^4.15.0",
+    "mime-types": "^2.1.12",
     "yargs": "^5.0.0"
   },
   "devDependencies": {
