@@ -8,6 +8,41 @@ const testImage = path.join(__dirname, testImageBase);
 const testFileBase = 'snoopy.txt';
 const testFile = path.join(__dirname, testFileBase);
 const useImageMagick = true; // can change this to false to use GraphicsMagick
+const datefmt = require('datefmt');
+
+describe('uses the --prefix option to get the key', () => {
+  it('by default should upload the image to a sub-folder', (done) => {
+    const stream = fs.createReadStream(testImage);
+    const options = {
+      imagemagick: useImageMagick,
+      bucket: process.env.AWS_BUCKET,
+      profile: process.env.AWS_PROFILE
+    };
+    s3put(stream, options, (err, response) => {
+      if (err) {
+        console.log(err);
+      }
+      chai.expect(response.key).to.include(datefmt('%Y-%m-%d', new Date()));
+      done();
+    });
+  });
+  it('by default should upload the image to a sub-folder', (done) => {
+    const stream = fs.createReadStream(testImage);
+    const options = {
+      imagemagick: useImageMagick,
+      bucket: process.env.AWS_BUCKET,
+      profile: process.env.AWS_PROFILE,
+      'no-prefix': true
+    };
+    s3put(stream, options, (err, response) => {
+      if (err) {
+        console.log(err);
+      }
+      chai.expect(response.key).to.not.include(datefmt('%Y-%m-%d', new Date()));
+      done();
+    });
+  });
+});
 
 describe('can be used as a library', () => {
   if (process.env.AWS_BUCKET === undefined || process.env.AWS_PROFILE === undefined) {
