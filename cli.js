@@ -26,6 +26,10 @@ const argv = require('yargs')
     nargs: 2,
     default: false
   },
+  imagemagick: {
+    describe: 'by default will use GraphicsMagick, set to true to use the ImageMagick binaries',
+    default: false
+  }
 })
 .demand(1)
 .demand('bucket')
