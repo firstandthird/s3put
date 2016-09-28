@@ -29,6 +29,7 @@
   "dependencies": {
     "async": "^2.0.1",
     "aws-sdk": "^2.6.3",
+    "datefmt": "^0.4.1",
     "fs-extra": "^0.30.0",
     "gm": "^1.23.0",
     "imagemin": "^5.2.2",
