@@ -32,7 +32,7 @@ describe('uses the --prefix option to get the key', () => {
       imagemagick: useImageMagick,
       bucket: process.env.AWS_BUCKET,
       profile: process.env.AWS_PROFILE,
-      'no-prefix': true
+      'no_prefix': true
     };
     s3put(stream, options, (err, response) => {
       if (err) {
