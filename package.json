@@ -1,0 +1,48 @@
+{
+  "name": "s3put",
+  "version": "1.0.0",
+  "description": "Node library and cli to crop, optimize and upload images and document to s3.",
+  "main": "main.js",
+  "bin": {
+    "s3put": "cli.js"
+  },
+  "scripts": {
+    "test": "mocha",
+    "lint": "eslint ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/firstandthird/s3put.git"
+  },
+  "keywords": [
+    "crop",
+    "upload",
+    "images",
+    "s3"
+  ],
+  "author": "First+Third",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/firstandthird/s3put/issues"
+  },
+  "homepage": "https://github.com/firstandthird/s3put#readme",
+  "dependencies": {
+    "async": "^2.0.1",
+    "aws-sdk": "^2.6.3",
+    "fs-extra": "^0.30.0",
+    "gm": "^1.23.0",
+    "imagemin": "^5.2.2",
+    "imagemin-mozjpeg": "^6.0.0",
+    "imagemin-pngquant": "^5.0.0",
+    "ini-config-parser": "^1.0.2",
+    "lodash": "^4.15.0",
+    "yargs": "^5.0.0"
+  },
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "eslint": "^3.4.0",
+    "eslint-config-firstandthird": "^3.0.2",
+    "eslint-plugin-import": "^1.14.0",
+    "mocha": "^3.0.2"
+  }
+}
