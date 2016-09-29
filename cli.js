@@ -12,6 +12,10 @@ const argv = require('yargs')
     describe: 'set the object as public in s3',
     default: false
   },
+  noprefix: {
+    describe: 'organize the uploaded image by day and timestamp in your bucket',
+    default: false
+  },
   bucket: {
     describe: 's3 bucket to upload the image to',
     demand: true

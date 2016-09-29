@@ -2,12 +2,13 @@ const chai = require('chai');
 const s3put = require('../main.js');
 const fs = require('fs');
 const path = require('path');
-
+const wreck = require('wreck');
 const testImageBase = 'snoopy.jpg';
 const testImage = path.join(__dirname, testImageBase);
 const testFileBase = 'snoopy.txt';
 const testFile = path.join(__dirname, testFileBase);
 const useImageMagick = true; // can change this to false to use GraphicsMagick
+const datefmt = require('datefmt');
 
 describe('can be used as a library', () => {
   if (process.env.AWS_BUCKET === undefined || process.env.AWS_PROFILE === undefined) {
@@ -93,6 +94,64 @@ describe('can be used as a library', () => {
       }
       chai.expect(response.key).to.include(testImageBase);
       done();
+    });
+  });
+});
+
+describe('uses the --prefix option to get the key', () => {
+  it('by default should upload the image to a sub-folder', (done) => {
+    const stream = fs.createReadStream(testImage);
+    const options = {
+      imagemagick: useImageMagick,
+      bucket: process.env.AWS_BUCKET,
+      profile: process.env.AWS_PROFILE
+    };
+    s3put(stream, options, (err, response) => {
+      if (err) {
+        console.log(err);
+      }
+      chai.expect(response.key).to.include(datefmt('%Y-%m-%d', new Date()));
+      done();
+    });
+  });
+  it('by default should upload the image to a sub-folder', (done) => {
+    const stream = fs.createReadStream(testImage);
+    const options = {
+      imagemagick: useImageMagick,
+      bucket: process.env.AWS_BUCKET,
+      profile: process.env.AWS_PROFILE,
+      noprefix: true
+    };
+    s3put(stream, options, (err, response) => {
+      if (err) {
+        console.log(err);
+      }
+      chai.expect(response.key).to.not.include(datefmt('%Y-%m-%d', new Date()));
+      done();
+    });
+  });
+});
+
+describe('uses the --public option to control whether the image hosted on s3 is available to everyone', () => {
+  it('--public option will set the ACL for the image to "public":', (done) => {
+    const stream = fs.createReadStream(testImage);
+    const options = {
+      imagemagick: useImageMagick,
+      bucket: process.env.AWS_BUCKET,
+      profile: process.env.AWS_PROFILE,
+      noprefix: true,
+      public: true
+    };
+    s3put(stream, options, (err, response) => {
+      if (err) {
+        console.log(err);
+      }
+      // now try to get the image from s3 (if it returns anything at all, it was public):
+      wreck.get(response.Location, (err, response, payload) => {
+        chai.expect(err).to.equal(null);
+        chai.expect(payload).to.exist;
+        done();
+      });
     });
   });
 });
