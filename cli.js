@@ -8,7 +8,7 @@ const argv = require('yargs')
     describe: 'name of aws profile to use',
     default: false
   },
-  'no_prefix': {
+  noprefix: {
     describe: 'organize the uploaded image by day and timestamp in your bucket',
     default: false
   },
