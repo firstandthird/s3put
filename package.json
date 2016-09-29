@@ -45,6 +45,7 @@
     "eslint": "^3.4.0",
     "eslint-config-firstandthird": "^3.0.2",
     "eslint-plugin-import": "^1.14.0",
-    "mocha": "^3.0.2"
+    "mocha": "^3.0.2",
+    "wreck": "^10.0.0"
   }
 }
