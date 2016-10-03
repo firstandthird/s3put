@@ -96,25 +96,6 @@ describe('can be used as a library', () => {
       done();
     });
   });
-  it('should be able to crop and then upload an image using the gravity option', (done) => {
-    const stream = fs.createReadStream(testImage);
-    const options = {
-      imagemagick: useImageMagick,
-      bucket: process.env.AWS_BUCKET,
-      profile: process.env.AWS_PROFILE,
-      quality: 80,
-      position: [10, 10],
-      size: [120, 120],
-      gravity: 'Center'
-    };
-    s3put(stream, options, (err, response) => {
-      if (err) {
-        console.log(err);
-      }
-      chai.expect(response.key).to.include(testImageBase);
-      done();
-    });
-  });
 });
 
 describe('uses the --prefix option to get the key', () => {
