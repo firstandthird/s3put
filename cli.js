@@ -34,6 +34,10 @@ const argv = require('yargs')
     nargs: 2,
     default: false
   },
+  gravity: {
+    describe: 'used in cropping, indicates the relative gravity of the crop position',
+    default: 'NorthWest'
+  },
   imagemagick: {
     describe: 'by default will use GraphicsMagick, set to true to use the ImageMagick binaries',
     default: false

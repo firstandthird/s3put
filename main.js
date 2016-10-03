@@ -7,29 +7,29 @@ const path = require('path');
 const fs = require('fs-extra');
 const os = require('os');
 
-const execute = (imageFilePath, argv, callback) => {
+const execute = (imageFilePath, options, callback) => {
   // establish AWS credentials:
-  const aws = awsAuth(argv);
+  const aws = awsAuth(options);
   // do the main pipeline:
   async.auto({
     compress: (done) => {
-      if (argv.quality) {
-        return image.compress(imageFilePath, argv.quality, (err, result) => {
+      if (options.quality) {
+        return image.compress(imageFilePath, options.quality, (err, result) => {
           return done(err, result);
         });
       }
       return done(null, imageFilePath);
     },
     crop: ['compress', (results, done) => {
-      if (argv.size) {
-        return image.crop(argv.imagemagick, results.compress, argv.position, argv.size, (err, result) => {
+      if (options.size) {
+        return image.crop(options.imagemagick, results.compress, options.position, options.size, options.gravity, (err, result) => {
           return done(err, result);
         });
       }
       return done(null, results.compress);
     }],
     upload: ['crop', (results, done) => {
-      return s3.put(aws, argv, results.crop, done);
+      return s3.put(aws, options, results.crop, done);
     }],
   }, (err, results) => {
     callback(err, results.upload);
