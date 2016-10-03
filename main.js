@@ -22,7 +22,7 @@ const execute = (imageFilePath, argv, callback) => {
     },
     crop: ['compress', (results, done) => {
       if (argv.size) {
-        return image.crop(argv.imagemagick, results.compress, argv.position, argv.size, (err, result) => {
+        return image.crop(argv.imagemagick, results.compress, argv.position, argv.size, argv.gravity, (err, result) => {
           return done(err, result);
         });
       }
