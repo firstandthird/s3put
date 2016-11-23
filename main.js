@@ -14,7 +14,7 @@ const execute = (imageFilePath, options, callback) => {
   // do the main pipeline:
   async.auto({
     compress: (done) => {
-      if (options.quality) {
+      if (options.quality && options.quality !== 100) {
         return image.compress(imageFilePath, options.quality, (err, result) => {
           return done(err, result);
         });
