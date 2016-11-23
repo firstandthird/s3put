@@ -1,7 +1,8 @@
 'use strict';
 const s3 = require('./lib/s3.js');
 const image = require('./lib/image.js');
-const awsAuth = require('./lib/commonAWS');
+const awsAuth = require('aws-creds');
+const AWS = require('aws-sdk');
 const async = require('async');
 const path = require('path');
 const fs = require('fs-extra');
@@ -9,7 +10,7 @@ const os = require('os');
 
 const execute = (imageFilePath, options, callback) => {
   // establish AWS credentials:
-  const aws = awsAuth(options);
+  const aws = awsAuth(AWS, 'S3', options);
   // do the main pipeline:
   async.auto({
     compress: (done) => {

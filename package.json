@@ -3,9 +3,6 @@
   "version": "1.0.0",
   "description": "Node library and cli to crop, optimize and upload images and document to s3.",
   "main": "main.js",
-  "bin": {
-    "s3put": "cli.js"
-  },
   "scripts": {
     "test": "mocha",
     "lint": "eslint ."
@@ -28,6 +25,7 @@
   "homepage": "https://github.com/firstandthird/s3put#readme",
   "dependencies": {
     "async": "^2.0.1",
+    "aws-creds": "^1.0.0",
     "aws-sdk": "^2.6.3",
     "datefmt": "^0.4.1",
     "fs-extra": "^0.30.0",
