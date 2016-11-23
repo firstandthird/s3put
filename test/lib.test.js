@@ -104,21 +104,6 @@ describe('uses the --prefix option to get the key', () => {
     const options = {
       imagemagick: useImageMagick,
       bucket: process.env.AWS_BUCKET,
-      profile: process.env.AWS_PROFILE
-    };
-    s3put(stream, options, (err, response) => {
-      if (err) {
-        console.log(err);
-      }
-      chai.expect(response.key).to.include(datefmt('%Y-%m-%d', new Date()));
-      done();
-    });
-  });
-  it('by default should upload the image to a sub-folder', (done) => {
-    const stream = fs.createReadStream(testImage);
-    const options = {
-      imagemagick: useImageMagick,
-      bucket: process.env.AWS_BUCKET,
       profile: process.env.AWS_PROFILE,
       noprefix: true
     };
