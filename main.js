@@ -18,19 +18,19 @@ const execute = (imageFilePath, options, callback) => {
       }
       return done(null, imageFilePath);
     },
-    compress: ['optimizeSvg', (results, done) => {
-      if (options.quality && options.quality !== 100) {
+    compress: (done) => {
+      if (options.quality && options.quality !== 100 && path.extname(imageFilePath).toLowerCase() !== '.svg') {
         return image.compress(imageFilePath, options.quality, done);
       }
       return done(null, imageFilePath);
-    }],
-    crop: ['compress', (results, done) => {
+    },
+    crop: ['compress', 'optimizeSvg', (results, done) => {
       if (options.size) {
-        return image.crop(options.imagemagick, results.compress, options.position, options.size, options.gravity, (err, result) => {
+        return image.crop(options.imagemagick, imageFilePath, options.position, options.size, options.gravity, (err, result) => {
           return done(err, result);
         });
       }
-      return done(null, results.compress);
+      return done(null, imageFilePath);
     }],
     upload: ['crop', (results, done) => {
       return s3.put(aws, options, results.crop, done);
