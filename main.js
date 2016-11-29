@@ -12,14 +12,18 @@ const execute = (imageFilePath, options, callback) => {
   const aws = awsAuth(options);
   // do the main pipeline:
   async.auto({
-    compress: (done) => {
-      if (options.quality && options.quality !== 100) {
-        return image.compress(imageFilePath, options.quality, (err, result) => {
-          return done(err, result);
-        });
+    optimizeSvg: (done) => {
+      if (path.extname(imageFilePath).toLowerCase() === '.svg') {
+        return image.svgOptimize(imageFilePath, done);
       }
       return done(null, imageFilePath);
     },
+    compress: ['optimizeSvg', (results, done) => {
+      if (options.quality && options.quality !== 100) {
+        return image.compress(imageFilePath, options.quality, done);
+      }
+      return done(null, imageFilePath);
+    }],
     crop: ['compress', (results, done) => {
       if (options.size) {
         return image.crop(options.imagemagick, results.compress, options.position, options.size, options.gravity, (err, result) => {

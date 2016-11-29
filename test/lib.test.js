@@ -7,6 +7,9 @@ const testImageBase = 'snoopy.jpg';
 const testImage = path.join(__dirname, testImageBase);
 const testFileBase = 'snoopy.txt';
 const testFile = path.join(__dirname, testFileBase);
+const testSVGBase = 'snoopy-pilot.svg';
+const testSVG = path.join(__dirname, testSVGBase);
+
 const useImageMagick = true; // can change this to false to use GraphicsMagick
 const datefmt = require('datefmt');
 
@@ -78,6 +81,22 @@ describe('can be used as a library', () => {
       done();
     });
   });
+  it('should be able to optimize an svg image with svgo then upload an image', (done) => {
+    const stream = fs.createReadStream(testSVG);
+    const options = {
+      imagemagick: useImageMagick,
+      bucket: process.env.AWS_BUCKET,
+      profile: process.env.AWS_PROFILE,
+      quality: 50
+    };
+    s3put(stream, options, (err, response) => {
+      if (err) {
+        console.log(err);
+      }
+      chai.expect(response.key).to.include(testSVGBase);
+      done();
+    });
+  });
   it('should be able to crop/compress/upload an image without error', (done) => {
     const stream = fs.createReadStream(testImage);
     const options = {
@@ -97,7 +116,6 @@ describe('can be used as a library', () => {
     });
   });
 });
-
 describe('uses the --prefix option to get the key', () => {
   it('by default should upload the image to a sub-folder', (done) => {
     const stream = fs.createReadStream(testImage);
