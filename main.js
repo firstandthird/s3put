@@ -13,21 +13,25 @@ const execute = (imageFilePath, options, callback) => {
   const aws = awsAuth(AWS, 'S3', options);
   // do the main pipeline:
   async.auto({
+    optimizeSvg: (done) => {
+      if (path.extname(imageFilePath).toLowerCase() === '.svg') {
+        return image.svgOptimize(imageFilePath, done);
+      }
+      return done(null, imageFilePath);
+    },
     compress: (done) => {
-      if (options.quality && options.quality !== 100) {
-        return image.compress(imageFilePath, options.quality, (err, result) => {
+      if (options.quality && options.quality !== 100 && path.extname(imageFilePath).toLowerCase() !== '.svg') {
+        return image.compress(imageFilePath, options.quality, done);
+      }
+      return done(null, imageFilePath);
+    },
+    crop: ['compress', 'optimizeSvg', (results, done) => {
+      if (options.size) {
+        return image.crop(options.imagemagick, imageFilePath, options.position, options.size, options.gravity, (err, result) => {
           return done(err, result);
         });
       }
       return done(null, imageFilePath);
-    },
-    crop: ['compress', (results, done) => {
-      if (options.size) {
-        return image.crop(options.imagemagick, results.compress, options.position, options.size, options.gravity, (err, result) => {
-          return done(err, result);
-        });
-      }
-      return done(null, results.compress);
     }],
     upload: ['crop', (results, done) => {
       return s3.put(aws, options, results.crop, done);
