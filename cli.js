@@ -8,10 +8,6 @@ const argv = require('yargs')
     describe: 'name of aws profile to use',
     default: false
   },
-  public: {
-    describe: 'set the object as public in s3',
-    default: false
-  },
   noprefix: {
     describe: 'organize the uploaded image by day and timestamp in your bucket',
     default: false
@@ -42,9 +38,21 @@ const argv = require('yargs')
     describe: 'by default will use GraphicsMagick, set to true to use the ImageMagick binaries',
     default: false
   },
+  maxAge: {
+    describe: 'Specify time in seconds that you want the object to remain cached',
+    default: false
+  },
   host: {
     describe: 'use an alternate CDN host instead of the default s3 host as the url',
     default: false
+  },
+  public: {
+    describe: "set the object's ACL to 'public-read' in s3. the --acl option takes precedence over this one",
+    default: false
+  },
+  acl: {
+    describe: 'specify a canned ACL tag (http://docs.aws.amazon.com/AmazonS3/latest/dev/acl-overview.html#canned-acl) for the object on s3',
+    default: 'private'
   }
 })
 .demand(1)
