@@ -1,6 +1,6 @@
 'use strict';
 const s3 = require('./lib/s3.js');
-const image = require('./lib/image.js');
+const image = require('optimiz');
 const awsAuth = require('aws-creds');
 const AWS = require('aws-sdk');
 const async = require('async');
