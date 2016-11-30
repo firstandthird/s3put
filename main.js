@@ -7,7 +7,7 @@ const async = require('async');
 const path = require('path');
 const fs = require('fs-extra');
 const os = require('os');
-
+const url = require('url');
 const execute = (imageFilePath, options, callback) => {
   // establish AWS credentials:
   const aws = awsAuth(AWS, 'S3', options);
@@ -31,8 +31,11 @@ const execute = (imageFilePath, options, callback) => {
     }],
     upload: ['crop', (results, done) => {
       return s3.put(aws, options, results.crop, done);
-    }],
+    }]
   }, (err, results) => {
+    if (options.host) {
+      results.upload.Location = `${options.host}${url.parse(results.upload.Location).path}`;
+    }
     callback(err, results.upload);
   });
 };
