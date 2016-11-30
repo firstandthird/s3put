@@ -45,39 +45,6 @@ describe('can be used as a library', () => {
       done();
     });
   });
-  it('should be able to crop and then upload an image', (done) => {
-    const stream = fs.createReadStream(testImage);
-    const options = {
-      imagemagick: useImageMagick,
-      bucket: process.env.AWS_BUCKET,
-      profile: process.env.AWS_PROFILE,
-      position: [20, 20],
-      size: [100, 100]
-    };
-    s3put(stream, options, (err, response) => {
-      if (err) {
-        console.log(err);
-      }
-      chai.expect(response.key).to.include(testImageBase);
-      done();
-    });
-  });
-  it('should be able to compress and then upload an image', (done) => {
-    const stream = fs.createReadStream(testImage);
-    const options = {
-      imagemagick: useImageMagick,
-      bucket: process.env.AWS_BUCKET,
-      profile: process.env.AWS_PROFILE,
-      quality: 50
-    };
-    s3put(stream, options, (err, response) => {
-      if (err) {
-        console.log(err);
-      }
-      chai.expect(response.key).to.include(testImageBase);
-      done();
-    });
-  });
   it('should be able to crop/compress/upload an image without error', (done) => {
     const stream = fs.createReadStream(testImage);
     const options = {
