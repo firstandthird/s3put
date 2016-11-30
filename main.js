@@ -1,6 +1,6 @@
 'use strict';
 const s3 = require('./lib/s3.js');
-const image = require('./lib/image.js');
+const image = require('optimiz');
 const awsAuth = require('aws-creds');
 const AWS = require('aws-sdk');
 const async = require('async');
@@ -8,29 +8,17 @@ const path = require('path');
 const fs = require('fs-extra');
 const os = require('os');
 const url = require('url');
+
 const execute = (imageFilePath, options, callback) => {
   // establish AWS credentials:
   const aws = awsAuth(AWS, 'S3', options);
   // do the main pipeline:
   async.auto({
-    compress: (done) => {
-      if (options.quality && options.quality !== 100) {
-        return image.compress(imageFilePath, options.quality, (err, result) => {
-          return done(err, result);
-        });
-      }
-      return done(null, imageFilePath);
+    process: (done) => {
+      image(imageFilePath, options, done);
     },
-    crop: ['compress', (results, done) => {
-      if (options.size) {
-        return image.crop(options.imagemagick, results.compress, options.position, options.size, options.gravity, (err, result) => {
-          return done(err, result);
-        });
-      }
-      return done(null, results.compress);
-    }],
-    upload: ['crop', (results, done) => {
-      return s3.put(aws, options, results.crop, done);
+    upload: ['process', (results, done) => {
+      s3.put(aws, options, results.process, done);
     }]
   }, (err, results) => {
     if (options.host) {
