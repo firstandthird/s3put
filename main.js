@@ -15,7 +15,7 @@ const execute = (imageFilePath, options, callback) => {
   // do the main pipeline:
   async.auto({
     process: (done) => {
-      image.process(imageFilePath, options, done);
+      image(imageFilePath, options, done);
     },
     upload: ['process', (results, done) => {
       s3.put(aws, options, results.process, done);
