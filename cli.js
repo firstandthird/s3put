@@ -41,6 +41,10 @@ const argv = require('yargs')
   imagemagick: {
     describe: 'by default will use GraphicsMagick, set to true to use the ImageMagick binaries',
     default: false
+  },
+  maxAge: {
+    describe: 'Specify time in seconds that you want the object to remain cached',
+    default: false
   }
 })
 .demand(1)
