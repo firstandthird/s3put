@@ -38,6 +38,10 @@ const execute = (imageFilePath, options, callback) => {
 };
 
 module.exports = (stream, options, callback) => {
+  if (options.host) {
+    options.endpoint = options.host;
+    delete options.host;
+  }
   const originalFilePath = typeof stream === 'string' ? stream : stream.path;
   const tmpFilePath = path.join(os.tmpdir(), path.basename(originalFilePath));
   const originalCallback = callback;
