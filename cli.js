@@ -41,6 +41,10 @@ const argv = require('yargs')
   imagemagick: {
     describe: 'by default will use GraphicsMagick, set to true to use the ImageMagick binaries',
     default: false
+  },
+  host: {
+    describe: 'use an alternative host instead of the default s3 host',
+    default: false
   }
 })
 .demand(1)
