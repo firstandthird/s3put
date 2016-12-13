@@ -1,4 +1,13 @@
 
+2.0.0 / 2016-12-13
+==================
+
+  * uses optimiz (#11)
+  * fixed aws-creds version
+  * lets you specify 'max-age' in CacheControl (#14)
+  * replaces default s3 url with --host CDN url (#13)
+  * uses aws-creds (#9)
+
 1.1.0 / 2016-11-22
 ==================
 
