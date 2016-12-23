@@ -31,18 +31,18 @@
     "aws-creds": "0.1.0",
     "aws-sdk": "^2.6.3",
     "datefmt": "^0.4.1",
-    "fs-extra": "^0.30.0",
+    "fs-extra": "^1.0.0",
     "ini-config-parser": "^1.0.2",
     "lodash": "^4.15.0",
     "mime-types": "^2.1.12",
     "optimiz": "^0.1.0",
-    "yargs": "^5.0.0"
+    "yargs": "^6.5.0"
   },
   "devDependencies": {
     "chai": "^3.5.0",
     "eslint": "^3.4.0",
     "eslint-config-firstandthird": "^3.0.2",
-    "eslint-plugin-import": "^1.14.0",
+    "eslint-plugin-import": "^2.2.0",
     "mocha": "^3.0.2",
     "wreck": "^10.0.0"
   }
