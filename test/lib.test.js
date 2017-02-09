@@ -1,3 +1,4 @@
+/* global describe, it */
 const chai = require('chai');
 const s3put = require('../main.js');
 const fs = require('fs');
@@ -7,7 +8,6 @@ const testImageBase = 'snoopy.jpg';
 const testImage = path.join(__dirname, testImageBase);
 const testFileBase = 'snoopy.txt';
 const testFile = path.join(__dirname, testFileBase);
-const useImageMagick = true; // can change this to false to use GraphicsMagick
 const datefmt = require('datefmt');
 
 describe('can be used as a library', () => {
@@ -18,13 +18,12 @@ describe('can be used as a library', () => {
   it('should be able to upload an unmodified image', (done) => {
     const stream = fs.createReadStream(testImage);
     const options = {
-      imagemagick: useImageMagick,
       bucket: process.env.AWS_BUCKET,
       profile: process.env.AWS_PROFILE
     };
     s3put(stream, options, (err, response) => {
       if (err) {
-        console.log(err);
+        return done(err);
       }
       chai.expect(response.key).to.include(testImageBase);
       done();
@@ -33,33 +32,14 @@ describe('can be used as a library', () => {
   it('should be able to upload a non-image', (done) => {
     const stream = fs.createReadStream(testFile);
     const options = {
-      imagemagick: useImageMagick,
       bucket: process.env.AWS_BUCKET,
       profile: process.env.AWS_PROFILE
     };
     s3put(stream, options, (err, response) => {
       if (err) {
-        console.log(err);
+        return done(err);
       }
       chai.expect(response.key).to.include(testFileBase);
-      done();
-    });
-  });
-  it('should be able to crop/compress/upload an image without error', (done) => {
-    const stream = fs.createReadStream(testImage);
-    const options = {
-      imagemagick: useImageMagick,
-      bucket: process.env.AWS_BUCKET,
-      profile: process.env.AWS_PROFILE,
-      quality: 80,
-      position: [10, 10],
-      size: [120, 120],
-    };
-    s3put(stream, options, (err, response) => {
-      if (err) {
-        console.log(err);
-      }
-      chai.expect(response.key).to.include(testImageBase);
       done();
     });
   });
@@ -69,14 +49,13 @@ describe('uses the --prefix option to get the key', () => {
   it('by default should upload the image to a sub-folder', (done) => {
     const stream = fs.createReadStream(testImage);
     const options = {
-      imagemagick: useImageMagick,
       bucket: process.env.AWS_BUCKET,
       profile: process.env.AWS_PROFILE,
       noprefix: true
     };
     s3put(stream, options, (err, response) => {
       if (err) {
-        console.log(err);
+        return done(err);
       }
       chai.expect(response.key).to.not.include(datefmt('%Y-%m-%d', new Date()));
       done();
@@ -88,7 +67,6 @@ describe('uses the --public option to control whether the image hosted on s3 is 
   it('--public option will set the ACL for the image to "public":', (done) => {
     const stream = fs.createReadStream(testImage);
     const options = {
-      imagemagick: useImageMagick,
       bucket: process.env.AWS_BUCKET,
       profile: process.env.AWS_PROFILE,
       noprefix: true,
@@ -96,7 +74,7 @@ describe('uses the --public option to control whether the image hosted on s3 is 
     };
     s3put(stream, options, (err, response) => {
       if (err) {
-        console.log(err);
+        return done(err);
       }
       // now try to get the image from s3 (if it returns anything at all, it was public):
       wreck.get(response.Location, (err, response, payload) => {
