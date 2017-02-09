@@ -1,4 +1,12 @@
 
+3.1.0 / 2017-02-08
+==================
+
+  * added support for uploading to a folder
+  * use fs
+  * removed excess deps
+  * removed cli
+
 3.0.0 / 2017-02-08
 ==================
 
