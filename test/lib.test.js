@@ -76,6 +76,7 @@ describe('uses the --public option to control whether the image hosted on s3 is 
       if (err) {
         return done(err);
       }
+      chai.expect(typeof response.Location).to.equal('string');
       // now try to get the image from s3 (if it returns anything at all, it was public):
       wreck.get(response.Location, (err, response, payload) => {
         chai.expect(err).to.equal(null);

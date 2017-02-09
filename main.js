@@ -1,56 +1,63 @@
 'use strict';
-const s3 = require('./lib/s3.js');
-const image = require('optimiz');
 const awsAuth = require('aws-creds');
 const AWS = require('aws-sdk');
 const async = require('async');
 const path = require('path');
+const mimeLookup = require('mime-types').lookup;
+const datefmt = require('datefmt');
 const fs = require('fs-extra');
-const os = require('os');
 const url = require('url');
 
-const execute = (imageFilePath, options, callback) => {
-  // establish AWS credentials:
-  const aws = awsAuth(AWS, 'S3', options);
-  // do the main pipeline:
-  async.auto({
-    process: (done) => {
-      image(imageFilePath, options, done);
+module.exports = (input, options, allDone) => {
+  async.autoInject({
+    aws(done) {
+      const aws = awsAuth(AWS, 'S3', options);
+      done(null, aws);
     },
-    upload: ['process', (results, done) => {
-      s3.put(aws, options, results.process, done);
-    }]
-  }, (err, results) => {
-    if (options.host) {
-      results.upload.Location = `${options.host}${url.parse(results.upload.Location).path}`;
+    stream(done) {
+      if (typeof input.on === 'function') {
+        return done(null, input);
+      }
+      const stream = fs.createReadStream(input);
+      done(null, stream);
+    },
+    filename(stream, done) {
+      done(null, stream.path);
+    },
+    s3Options(filename, stream, done) {
+      let fileKey = path.basename(filename);
+      if (options.noprefix !== true) {
+        fileKey = `${datefmt('%Y-%m-%d', new Date())}/${(+new Date)}/${fileKey}`;
+      }
+      const s3Options = {
+        Bucket: options.bucket,
+        Key: fileKey,
+        Body: stream,
+        ACL: options.public ? 'public-read' : 'private',
+        ContentType: mimeLookup(filename),
+      };
+      if (options.maxAge) {
+        s3Options.CacheControl = `max-age=${options.maxAge}`;
+      }
+      if (s3Options.acl) {
+        s3Options.ACL = options.acl;
+      }
+      done(null, s3Options);
+    },
+    upload(aws, s3Options, done) {
+      aws.upload(s3Options, done);
+    },
+    location(upload, done) {
+      if (!options.host) {
+        return done();
+      }
+      upload.Location = `${options.host}${url.parse(upload.Location).path}`;
+      done();
     }
-    callback(err, results.upload);
+  }, (err, results) => {
+    if (err) {
+      return allDone(err);
+    }
+    allDone(null, results.upload);
   });
-};
-
-module.exports = (stream, options, callback) => {
-  const originalFilePath = typeof stream === 'string' ? stream : stream.path;
-  const tmpFilePath = path.join(os.tmpdir(), path.basename(originalFilePath));
-  const originalCallback = callback;
-  // wrap the callback so it cleans up and returns the results:
-  callback = (err, uploadResult) => {
-    fs.remove(tmpFilePath);
-    return originalCallback(err, uploadResult);
-  };
-  // make sure options is set
-  if (options.profile === undefined) {
-    options.profile = false;
-  }
-  // make sure the tmp file is written into the tmp folder:
-  if (typeof stream === 'object' && stream.path) {
-    const writeStream = fs.createWriteStream(tmpFilePath);
-    writeStream.on('finish', () => {
-      execute(tmpFilePath, options, callback);
-    });
-    stream.pipe(writeStream);
-  } else {
-    // just copy the file to the temp folder:
-    fs.copySync(originalFilePath, tmpFilePath);
-    execute(tmpFilePath, options, callback);
-  }
 };
