@@ -1,4 +1,13 @@
 
+3.0.0 / 2017-02-08
+==================
+
+  * refactored to optimize with a stream
+  * removed optimiz
+  * tweak tests
+  * chore(package): update dependencies (#16)
+  * remove excess dep (#15)
+
 2.0.0 / 2016-12-13
 ==================
 
