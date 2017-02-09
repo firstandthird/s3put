@@ -29,6 +29,23 @@ describe('can be used as a library', () => {
       done();
     });
   });
+
+  it('should be able to upload a file to folder', (done) => {
+    const stream = fs.createReadStream(testImage);
+    const options = {
+      bucket: process.env.AWS_BUCKET,
+      profile: process.env.AWS_PROFILE,
+      folder: 'folder'
+    };
+    s3put(stream, options, (err, response) => {
+      if (err) {
+        return done(err);
+      }
+      chai.expect(response.key).to.include('folder');
+      done();
+    });
+  });
+
   it('should be able to upload a non-image', (done) => {
     const stream = fs.createReadStream(testFile);
     const options = {

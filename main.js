@@ -29,6 +29,9 @@ module.exports = (input, options, allDone) => {
       if (options.noprefix !== true) {
         fileKey = `${datefmt('%Y-%m-%d', new Date())}/${(+new Date)}/${fileKey}`;
       }
+      if (options.folder) {
+        fileKey = path.join(options.folder, fileKey);
+      }
       const s3Options = {
         Bucket: options.bucket,
         Key: fileKey,
