@@ -9,6 +9,9 @@ const fs = require('fs');
 const url = require('url');
 
 module.exports = (input, options, allDone) => {
+  if (!options.bucket) {
+    return allDone(new Error('bucket must be passed in'));
+  }
   async.autoInject({
     aws(done) {
       const aws = awsAuth(AWS, 'S3', options);
