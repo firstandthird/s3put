@@ -28,7 +28,7 @@ module.exports = (input, options, allDone) => {
       done(null, stream);
     },
     filename(stream, done) {
-      const filename = options.path || stream.path;
+      const filename = options.filename || options.path || stream.path;
       if (!filename) {
         return done(new Error('must pass in path if a buffer'));
       }
