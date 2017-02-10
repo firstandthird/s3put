@@ -29,6 +29,24 @@ describe('can be used as a library', () => {
       done();
     });
   });
+  
+  it('should support buffers', (done) => {
+    fs.readFile(testImage, (err, buffer) => {
+      const options = {
+        bucket: process.env.AWS_BUCKET,
+        profile: process.env.AWS_PROFILE,
+        path: testImage
+      };
+      s3put(buffer, options, (err, response) => {
+        if (err) {
+          return done(err);
+        }
+        chai.expect(response.key).to.include(testImageBase);
+        done();
+      });
+    });
+
+  });
 
   it('should be able to upload a file to folder', (done) => {
     const stream = fs.createReadStream(testImage);

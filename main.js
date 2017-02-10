@@ -21,11 +21,18 @@ module.exports = (input, options, allDone) => {
       if (typeof input.on === 'function') {
         return done(null, input);
       }
+      if (Buffer.isBuffer(input)) {
+        return done(null, input);
+      }
       const stream = fs.createReadStream(input);
       done(null, stream);
     },
     filename(stream, done) {
-      done(null, stream.path);
+      const filename = options.path || stream.path;
+      if (!filename) {
+        return done(new Error('must pass in path if a buffer'));
+      }
+      done(null, filename);
     },
     s3Options(filename, stream, done) {
       let fileKey = path.basename(filename);
