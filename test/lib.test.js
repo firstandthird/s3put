@@ -11,9 +11,8 @@ const testFile = path.join(__dirname, testFileBase);
 const datefmt = require('datefmt');
 
 describe('can be used as a library', () => {
-  if (process.env.AWS_BUCKET === undefined || process.env.AWS_PROFILE === undefined) {
-    console.log('You must define an AWS_BUCKET and an AWS_PROFILE environment variable to test against!');
-    process.exit();
+  if (process.env.AWS_BUCKET === undefined) {
+    throw new Error('You must define AWS_BUCKET');
   }
   it('should be able to upload an unmodified image', (done) => {
     const stream = fs.createReadStream(testImage);
