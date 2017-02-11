@@ -34,7 +34,7 @@ module.exports = (input, options, allDone) => {
       }
       done(null, filename);
     },
-    s3Options(filename, stream, done) {
+    fileKey(filename, done) {
       let fileKey = path.basename(filename);
       if (options.noprefix !== true) {
         fileKey = `${datefmt('%Y-%m-%d', new Date())}/${(+new Date)}/${fileKey}`;
@@ -42,6 +42,9 @@ module.exports = (input, options, allDone) => {
       if (options.folder) {
         fileKey = path.join(options.folder, fileKey);
       }
+      done(null, fileKey);
+    },
+    s3Options(filename, fileKey, stream, done) {
       const s3Options = {
         Bucket: options.bucket,
         Key: fileKey,
@@ -60,11 +63,11 @@ module.exports = (input, options, allDone) => {
     upload(aws, s3Options, done) {
       aws.upload(s3Options, done);
     },
-    location(upload, done) {
+    location(upload, fileKey, done) {
       if (!options.host) {
         return done();
       }
-      upload.Location = `${options.host}${url.parse(upload.Location).path}`;
+      upload.Location = url.resolve(options.host, fileKey);
       done();
     }
   }, (err, results) => {

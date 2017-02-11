@@ -114,9 +114,47 @@ describe('uses the --public option to control whether the image hosted on s3 is 
       // now try to get the image from s3 (if it returns anything at all, it was public):
       wreck.get(response.Location, (err, response, payload) => {
         chai.expect(err).to.equal(null);
+        chai.expect(response.statusCode).to.equal(200);
         chai.expect(payload).to.exist;
         done();
       });
+    });
+  });
+});
+
+describe('host', () => {
+
+  it('should override host if set', (done) => {
+    const stream = fs.createReadStream(testImage);
+    const options = {
+      bucket: process.env.AWS_BUCKET,
+      profile: process.env.AWS_PROFILE,
+      noprefix: true,
+      host: 'http://testhost.com',
+    };
+    s3put(stream, options, (err, response) => {
+      if (err) {
+        return done(err);
+      }
+      chai.expect(response.Location).to.equal('http://testhost.com/snoopy.jpg');
+      done();
+    });
+  });
+  it('should override host if set with folder', (done) => {
+    const stream = fs.createReadStream(testImage);
+    const options = {
+      bucket: process.env.AWS_BUCKET,
+      profile: process.env.AWS_PROFILE,
+      noprefix: true,
+      folder: 'blah',
+      host: 'http://testhost.com',
+    };
+    s3put(stream, options, (err, response) => {
+      if (err) {
+        return done(err);
+      }
+      chai.expect(response.Location).to.equal('http://testhost.com/blah/snoopy.jpg');
+      done();
     });
   });
 });
