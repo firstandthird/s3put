@@ -4,7 +4,7 @@
   "description": "Node library and cli to crop, optimize and upload images and document to s3.",
   "main": "main.js",
   "scripts": {
-    "test": "mocha",
+    "test": "tap test/lib.test.js",
     "lint": "eslint ."
   },
   "repository": {
@@ -24,18 +24,16 @@
   },
   "homepage": "https://github.com/firstandthird/s3put#readme",
   "dependencies": {
-    "async": "^2.0.1",
     "aws-creds": "0.1.0",
     "aws-sdk": "^2.6.3",
     "datefmt": "^0.4.1",
     "mime-types": "^2.1.12"
   },
   "devDependencies": {
-    "chai": "^3.5.0",
-    "eslint": "^3.9.1",
-    "eslint-config-firstandthird": "^3.0.2",
-    "eslint-plugin-import": "^2.2.0",
-    "mocha": "^3.0.2",
-    "wreck": "^10.0.0"
+    "eslint": "^4.13.1",
+    "eslint-config-firstandthird": "^4.3.0",
+    "eslint-plugin-import": "^2.8.0",
+    "tap": "^11.0.1",
+    "wreck": "^14.0.2"
   }
 }
