@@ -25,8 +25,6 @@ tap.test('should be able to upload an unmodified image', async(t) => {
     t.notEqual(response.key.indexOf(testImageBase), -1);
     t.end();
   } catch (e) {
-    console.log('threw err')
-    console.log(e)
     t.fail();
   }
 });
