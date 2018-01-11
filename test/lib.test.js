@@ -27,6 +27,7 @@ tap.test('should be able to upload an unmodified image', async(t) => {
   } catch (e) {
     console.log('threw err')
     console.log(e)
+    t.fail();
   }
 });
 

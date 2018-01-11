@@ -6,7 +6,7 @@ const mimeLookup = require('mime-types').lookup;
 const datefmt = require('datefmt');
 const fs = require('fs');
 const url = require('url');
-const util = require('util');
+
 module.exports = async(input, options) => {
   if (!options.bucket) {
     throw new Error('bucket must be passed in');
@@ -37,9 +37,9 @@ module.exports = async(input, options) => {
   if (s3Options.acl) {
     s3Options.ACL = options.acl;
   }
-  const upload = await util.promisify(aws.upload)(s3Options);
+  const upload = await aws.upload(s3Options).promise();
   if (!options.host) {
-    return;
+    return upload;
   }
   upload.Location = url.resolve(options.host, fileKey);
   return upload;
