@@ -24,7 +24,7 @@
   },
   "homepage": "https://github.com/firstandthird/s3put#readme",
   "dependencies": {
-    "aws-creds": "0.1.0",
+    "aws-creds": "^0.1.1",
     "aws-sdk": "^2.6.3",
     "datefmt": "^0.4.1",
     "mime-types": "^2.1.12"
